@@ -27,6 +27,7 @@ if __name__ == '__main__':
 	essentia.log.infoActive = False
 	essentia.log.warningActive = False
 	
+	valid_commands = ['loaddir','play','pause','skip', 'stop', 'save', 'showannotated', 'annotate', 'debug', 'mark', 'help']
 	while(True):
 		try:
 			cmd_split = str.split(raw_input('> : '), ' ')
@@ -34,7 +35,13 @@ if __name__ == '__main__':
 			logger.info('Goodbye!')
 			break
 		cmd = cmd_split[0]
-		if cmd == 'loaddir':
+
+
+		if cmd == 'help':
+			print "valid commands:"
+			for cmd in valid_commands:
+				print "  %s" % cmd
+		elif cmd == 'loaddir':
 			if len(cmd_split) == 1:
 				logger.warning('Please provide a directory name to load!')
 				continue

@@ -169,11 +169,25 @@ class DjController:
 			os.dup2(save[1], 2)
 			os.close(null_fds[0])
 			os.close(null_fds[1])
+
+		# by default set preferred device to whatever is default
+		# but then look for pulse and choose it if found in case
+		# it is NOT default, it is our preferred device
+		preferred_device = 0
+		_inf = self.pyaudio.get_default_output_device_info()
+		preferred_device = _inf.index
+		for i in range(self.pyaudio.get_device_count()):
+			_inf = self.pyaudio.get_device_info(i)
+			if _inf.name == 'pulse':
+				preferred_device = i
+				break
+
 			
 		if self.stream is None:
 			self.stream = self.pyaudio.open(format = pyaudio.paFloat32,
 						channels=1,
 						rate=44100,
+						output_device_index=preferred_device,
 						output=True)
 						
 		while isPlaying.value:
