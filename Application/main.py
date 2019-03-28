@@ -26,8 +26,9 @@ if __name__ == '__main__':
 	
 	essentia.log.infoActive = False
 	essentia.log.warningActive = False
-	
-	valid_commands = ['loaddir','play','pause','skip', 'stop', 'save', 'showannotated', 'annotate', 'debug', 'mark', 'help']
+
+	crates=['90s', 'beats2think2', 'clubanthems', 'dancehistory', 'frankie', 'psb', 'singletons', 'spotify', 'spotify2', 'spotify3']
+	valid_commands = ['crate', 'crates', 'loaddir','play','pause','skip', 'stop', 'save', 'showannotated', 'annotate', 'debug', 'mark', 'help']
 	while(True):
 		try:
 			cmd_split = str.split(raw_input('> : '), ' ')
@@ -41,6 +42,21 @@ if __name__ == '__main__':
 			print "valid commands:"
 			for cmd in valid_commands:
 				print "  %s" % cmd
+		elif cmd == 'crate':
+			if len(cmd_split) == 1:
+				logger.warning('Please provide a crate name to load!')
+				continue
+			elif cmd_split[1] not in crates:
+#			elif not os.path.isdir("autodjcrate/" + cmd_split[1])
+				logger.warning(cmd_split[1] + ' is not a valid directory!')
+				continue
+			sc.load_directory("autodjcrate/" + cmd_split[1])
+			logger.info(str(len(sc.songs)) + ' songs loaded [annotated: ' + str(len(sc.get_annotated())) + ']')
+
+		elif cmd == 'crates':
+			print "valid crates:"
+			for crate in crates:
+				print "  %s" % crate
 		elif cmd == 'loaddir':
 			if len(cmd_split) == 1:
 				logger.warning('Please provide a directory name to load!')

@@ -173,12 +173,16 @@ class DjController:
 		# by default set preferred device to whatever is default
 		# but then look for pulse and choose it if found in case
 		# it is NOT default, it is our preferred device
+		print "searching for preferred output device..."
 		preferred_device = 0
 		_inf = self.pyaudio.get_default_output_device_info()
-		preferred_device = _inf.index
+		preferred_device = _inf['index']
+		print "default is %s" % _inf['name']
 		for i in range(self.pyaudio.get_device_count()):
-			_inf = self.pyaudio.get_device_info(i)
-			if _inf.name == 'pulse':
+			_inf = self.pyaudio.get_device_info_by_index(i)
+			print "examining device %d-%s" % (i, _inf['name'])
+			if _inf['name'] == 'pulse':
+				print "pulseaudio found, setting default device to %d" % i
 				preferred_device = i
 				break
 
